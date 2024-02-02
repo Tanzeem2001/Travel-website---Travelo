@@ -3,11 +3,22 @@ import styled from "styled-components";
 import logo from "../assets/logo.png";
 import {GiHamburgerMenu} from "react-icons/gi"
 import {VscChromeClose} from "react-icons/vsc"
+import { Link, useNavigate  } from 'react-router-dom';
 export default function Navbar() {
     const [navbarState, setNavbarState] = useState(false);
-  return (
-    <>
-     <Nav>
+
+    
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        localStorage.removeItem("authToken");
+    navigate("/login");// Implement your logout logic here
+    };
+
+    
+    return (
+        <>
+            <Nav navbarState={navbarState}>
+     <div className='header'>
          <div className="brand">
             <div className="container">
                 <img src={logo} alt="" />
@@ -24,33 +35,46 @@ export default function Navbar() {
          </div>
          <ul>
             <li>
-                <a href="#hero">Home</a>
+                <Link className="link" to="/hero">Home</Link >
             </li>
             <li>
-                <a href="#services">Service</a>
+                <Link className="link" to="/services">Service</Link >
             </li>
             <li>
-                <a href="#recommend">Place</a>
+                <Link className="link" to="/recommend">Place</Link >
             </li>
             <li>
-                <a href="#testimonials">Testimonials</a>
+                <Link className="link" to="/testimonials">Testimonials</Link >
             </li>
+            {localStorage.getItem("authToken") ? (
+                <li>
+                    <Link className="link" to="/"  onClick={handleLogout}>Logout</Link>         
+                </li>
+            ):(
+            <li>
+                <Link className="link" to="/login">Login</Link >
+            </li>
+            )}
          </ul>
          <button>Connect</button>
+     </div>
      </Nav> 
      <ResponsiveNav state = {navbarState}>
      <ul>
             <li>
-                <a href="#hero" onClick={() => setNavbarState(false)}>Home</a>
+                <Link  className="link" to="/hero" onClick={() => setNavbarState(false)}>Home</Link>
             </li>
             <li>
-                <a href="#services" onClick={() => setNavbarState(false)}>Service</a>
+                <Link className="link" to="/services" onClick={() => setNavbarState(false)}>Service</Link>
             </li>
             <li>
-                <a href="#recommend" onClick={() => setNavbarState(false)}>Place</a>
+                <Link className="link" to="/recommend" onClick={() => setNavbarState(false)}>Place</Link>
             </li>
             <li>
-                <a href="#testimonials" onClick={() => setNavbarState(false)}>Testimonials</a>
+                <Link className="link" to="/testimonials" onClick={() => setNavbarState(false)}>Testimonials</Link>
+            </li>
+            <li>
+                <Link className="link" to="/login" onClick={() => setNavbarState(false)}>Login</Link>
             </li>
          </ul>
      </ResponsiveNav>
@@ -59,9 +83,22 @@ export default function Navbar() {
 }
 
 const Nav = styled.nav`
+    position: fixed; /* Add fixed position */
+    top:0; /* Stick Navbar to the top */
+    left:0;
+    z-index: 1000;
+    width: 100%; /* Take full width */
     display: flex;
     justify-content: space-between;
     align-items: center;
+    .header{
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
+        height: 100px;
+        background-color: #217d8f;
+    
     .brand{
         .container{
             cursor: pointer;
@@ -69,9 +106,13 @@ const Nav = styled.nav`
             justify-content: center;
             align-items: center;
             gap: 0.4rem;
-            font-size: 1.2rem;
-            font-weight: 900;
+            font-size: 3.2rem;
+            font-weight: 700;
             text-transform: uppercace;
+            img{
+                height: 4rem;
+                width: 4rem;
+            }
         }
         .toggle{
             display: none;
@@ -80,21 +121,21 @@ const Nav = styled.nav`
     ul{
         display: flex;
         list-style-type: none;
-        gap: 3rem;
+        gap: 5rem;
         li{ 
-            a{
+           .link{
                 text-decoration: none;
-                color: #0077b6;
-                font-size: 1.2rem;
-                transition: 0ms.1s ease-in-out;
+                color: #b3d2e3;
+                font-size: 1.6rem;
+                transition: 0.1s ease-in-out;
                 &:hover{
-                    color: #023e8a;
+                    color: #18cddf;
                     font-weight: 900;
                 }
             }
             &:first-of-type{
-                a{
-                    color: #023e8a;
+                .link{
+                    color: #18cddf;
                     font-weight: 900;
                 }
             }
@@ -115,34 +156,56 @@ const Nav = styled.nav`
             background-color: #023e8a;
         }
     }
+}
 
-    @media screen and (min-width:280px) and (max-width:1080px) {
-        .brand {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            .toggle{
-                display: block;
+    @media screen and (max-width: 768px) {
+        .header {
+            .brand {
+              font-size: 20px;
+      
+              img {
+                height: 30px;
+                width: 30px;
+              }
             }
+      
+            .toggle {
+              display: block;
+            }
+      
+            ul {
+              display: none;
+              flex-direction: column;
+              position: fixed;
+              top: 100px;
+              left: 0;
+              width: 100%;
+              background-color: #217d8f;
+              padding: 20px;
+              z-index: 999;
+            }
+      
+            ul.active {
+              display: flex;
+            }
+      
+            li {
+              margin-bottom: 10px;
+            }
+          }
         }
-        ul, 
-        button {
-            display: none;
-        }
-    }
 `;
 
 const ResponsiveNav = styled.div`
    display: flex;
-   position: absolute;
-   z-index: 5;
+   position: fixed;
+   z-index: 1001;
    background-color: white;
    width: 100%;
    height: 30vh;
    align-items: center;
    transition: 0.3s ease-in-out;
-   top: ${({ state }) => (state ? "50px" : "-400px")};
+   top: ${({ navbarState }) => (navbarState ? "50px" : "-400px")};
    ul {
     list-style-type: none;
     width: 100%;
@@ -150,7 +213,7 @@ const ResponsiveNav = styled.div`
         width: 100%;
         margin: 1rem 0;
         margin-left: 2rem;
-        a {
+        .link {
             text-decoration: none;
             color: #0077b6;
             font-size: 1.2rem;
@@ -160,7 +223,7 @@ const ResponsiveNav = styled.div`
             }
         }
         &:first-of-type {
-            a{
+            .link{
                 color: #023e8a;
                 font-weight: 900;
             }

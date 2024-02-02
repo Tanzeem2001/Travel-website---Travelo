@@ -113,6 +113,7 @@ export default function Recommend() {
 }
 
 const Section = styled.section`
+    margin-top: 6rem;
     padding: 2rem 0;
     .title{
         text-align: center;

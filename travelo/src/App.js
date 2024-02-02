@@ -1,12 +1,15 @@
 import React, {useEffect} from 'react'
 import ScrollToTop from './components/ScrollToTop'
 import Navbar from './components/Navbar'
-import Hero from './components/Hero'
 import Services from './components/Services'
 import Recommend from './components/Recommend'
 import Testimonials from './components/Testimonials'
 import Footer from './components/Footer'
 import scrollreveal from "scrollreveal"
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './components/Home'
+import Login from './components/Login'
+import Signup from './components/Signup'
 export default function App() {
 useEffect(() => {
   const sr = scrollreveal({
@@ -28,16 +31,23 @@ useEffect(() => {
       internal: 300,
     }
   )
-})
+},[]);
   return (
-    <>
-      <ScrollToTop />
+    <Router>
+      <div className='App'>
       <Navbar />
-      <Hero />
-      <Services />
-      <Recommend />
-      <Testimonials />
+       <Routes>
+        <Route path='/' element = {<Home/>}/>
+        <Route path='/hero' element = {<Home />}/>
+        <Route path='/services' element = {<Services />}/>
+        <Route path='/recommend' element = {<Recommend />}/>
+        <Route path='/testimonials' element = {<Testimonials />}/>
+        <Route path='/login' element = {<Login/>}/>
+        <Route path='/signup' element = {<Signup/>}/>
+       </Routes>
+      <ScrollToTop />
       <Footer />
-    </>
+      </div>
+    </Router>
   )
 }

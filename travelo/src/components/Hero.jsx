@@ -38,7 +38,8 @@ export default function Hero() {
 
 const Section = styled.section`
   position: relative;
-  margin-top: 2rem;
+  margin-top: 6.5rem;
+  marrgin-bottom: -5rem;
   width: 100%;
   height: 100%;
   .background{
