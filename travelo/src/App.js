@@ -19,15 +19,14 @@ useEffect(() => {
     reset: true,
   })
   sr.reveal(
-    `
-    nav,
+    `nav,
     #hero,
     #services,
     #recommend,
     #testimonials,
     #footer`,
     {
-      opacity: 0,
+      opacity: 1,
       internal: 300,
     }
   )
